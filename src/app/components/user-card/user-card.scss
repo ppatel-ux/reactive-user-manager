@@ -1,0 +1,151 @@
+:host {
+  display: block;
+}
+
+.user-card {
+  height: 100%;
+  padding: 1.25rem;
+  border: 1px solid #e3e8f0;
+  border-radius: 12px;
+  background: #fff;
+  box-shadow: 0 3px 12px rgb(25 42 70 / 5%);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  margin-bottom: 1.25rem;
+
+  img {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: #f0f3f8;
+  }
+}
+
+.header-actions {
+  display: grid;
+  justify-items: end;
+  gap: 0.25rem;
+}
+
+.user-heading {
+  min-width: 0;
+  flex: 1;
+
+  h3,
+  p {
+    overflow: hidden;
+    margin: 0;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  h3 {
+    color: #17243b;
+    font-size: 1rem;
+  }
+
+  p {
+    margin-top: 0.25rem;
+    color: #738099;
+    font-size: 0.875rem;
+  }
+}
+
+.remove-button {
+  padding: 0.4rem 0.55rem;
+  border: 0;
+  color: #6b7280;
+  background: transparent;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+}
+
+.user-details {
+  display: grid;
+  gap: 0.9rem;
+  margin: 0;
+
+  div,
+  label {
+    display: grid;
+    gap: 0.3rem;
+  }
+
+  dt,
+  label {
+    color: #738099;
+    font-size: 0.8rem;
+    font-weight: 600;
+  }
+
+  dd {
+    overflow-wrap: anywhere;
+    margin: 0;
+    color: #26354d;
+    font-size: 0.9rem;
+  }
+
+  input {
+    width: 100%;
+    padding: 0.55rem 0.65rem;
+    border: 1px solid #cbd4e1;
+    border-radius: 6px;
+    color: #26354d;
+    font: inherit;
+    font-size: 0.9rem;
+  }
+}
+
+.edit-button {
+  width: 100%;
+  margin-top: 1.25rem;
+}
+
+.card-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+
+.primary-button,
+.secondary-button {
+  padding: 0.6rem 0.8rem;
+  border: 1px solid transparent;
+  border-radius: 6px;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.primary-button {
+  color: #fff;
+  background: #3158c8;
+}
+
+.secondary-button {
+  border-color: #d7deea;
+  color: #34425a;
+  background: #fff;
+}
+
+.delete-button {
+  padding: 0.4rem 0.55rem;
+  border: 0;
+  border-radius: 6px;
+  color: #8f1d14;
+  background: #fff1f0;
+  cursor: pointer;
+  font: inherit;
+  font-size: 0.8rem;
+
+  &:disabled {
+    cursor: wait;
+    opacity: 0.65;
+  }
+}

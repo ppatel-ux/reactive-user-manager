@@ -1,12 +1,11 @@
-import { Component, signal } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Component } from '@angular/core';
+import { UserList } from './components/user-list/user-list';
 
 @Component({
-  imports: [RouterOutlet],
+  standalone: true,
+  imports: [UserList],
   selector: 'app-root',
   styleUrl: './app.scss',
   templateUrl: './app.html',
 })
-export class App {
-  protected readonly title = signal('reactive-user-manager');
-}
+export class App {}

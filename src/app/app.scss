@@ -1,18 +1,42 @@
+:host {
+  display: block;
+  min-height: 100vh;
+}
 
 .app-container {
   max-width: 1100px;
-  margin: 40px auto;
-  padding: 24px;
-  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
 }
 
-h1 {
-  margin-bottom: 8px;
+.app-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #e5e7eb;
+
+  h1 {
+    margin: 0 0 0.5rem;
+    color: #1f2937;
+    font-size: 2rem;
+  }
+
+  p {
+    margin: 0;
+    color: #6b7280;
+    line-height: 1.6;
+  }
 }
 
-.content {
-  margin-top: 28px;
-  padding: 24px;
-  border: 1px solid #ddd;
-  border-radius: 12px;
+.user-list-section {
+  width: 100%;
+}
+
+@media (max-width: 600px) {
+  .app-container {
+    padding: 1.25rem 1rem;
+  }
+
+  .app-header h1 {
+    font-size: 1.6rem;
+  }
 }

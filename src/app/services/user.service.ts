@@ -1,46 +1,34 @@
+import { HttpClient } from '@angular/common/http';
 import { Injectable, inject } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, map } from 'rxjs';
+import { User, UserInput, UsersResponse } from '../models/user.model';
 
-import { User } from '../models/user.model';
-import { UsersResponse } from '../models/users-response.model';
-
-@Injectable({
-  //Makes the service available through Angular's dependency injection system
-  // without registering it manually in every component
-  providedIn: 'root',
-})
+@Injectable({ providedIn: 'root' })
 export class UserService {
   private readonly http = inject(HttpClient);
-  //Gives the service access to Angular's HTTP client. We use this to send GET and PUT requests.
+  // httpclient return observables
 
-  private readonly apiUrl = 'https://dummyjson.com/users';
+  private readonly apiUrl = 'https://caf6bde20c74ff9c0a8a.free.beeceptor.com/api/users';
 
-  getUsers(): Observable<UsersResponse> {
-    //returns an observable of UsersResponse, which is a wrapper object containing an array of User objects
-    // and metadata about the response, async result which we can subscribe to in the component to get the data when it arrives.
-
-    //We use HttpParams to set the 'limit' parameter to 0, which means we want to fetch all users without any limit on the number of results.
-    const params = new HttpParams().set('limit', 0);
-
-    return this.http.get<UsersResponse>(this.apiUrl, { params });
+  getUsers(): Observable<User[]> {
+    return this.http.get<User[] | UsersResponse>(this.apiUrl).pipe(
+      map((response) => (Array.isArray(response) ? response : response.users)),
+    );
   }
 
-  searchUsers(username: string): Observable<UsersResponse> {
-    const params = new HttpParams().set('q', username);
-
-    return this.http.get<UsersResponse>(`${this.apiUrl}/search`, { params });
+  getUserDetails(id: number): Observable<User> {
+    return this.http.get<User>(`${this.apiUrl}/${id}`); //for a particular user
   }
 
-  getUserById(id: number): Observable<User> {
-    return this.http.get<User>(`${this.apiUrl}/${id}`);
+  createUser(user: UserInput): Observable<User> {
+    return this.http.post<User>(this.apiUrl, user);
   }
 
-  updateUser(
-    id: number,
-    changes: Partial<User>, //only the fields that need to be updated are sent in the request body,
-    //so we use Partial<User> to allow for partial updates
-  ): Observable<User> {
-    return this.http.put<User>(`${this.apiUrl}/${id}`, changes);
+  updateUser(id: number, user: UserInput): Observable<User> {
+    return this.http.put<User>(`${this.apiUrl}/${id}`, user);
+  }
+
+  deleteUser(id: number): Observable<void> {
+    return this.http.delete<unknown>(`${this.apiUrl}/${id}`).pipe(map(() => undefined));
   }
 }

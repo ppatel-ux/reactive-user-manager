@@ -1,0 +1,113 @@
+<article class="user-card">
+  <header class="card-header">
+    @if (user().image) {
+      <img [src]="user().image" [alt]="user().firstName + ' ' + user().lastName" />
+    }
+    <div class="user-heading">
+      <h3>{{ user().firstName }} {{ user().lastName }}</h3>
+      <p>@{{ user().username }}</p>
+    </div>
+    <div class="header-actions">
+      <button
+        class="remove-button"
+        type="button"
+        aria-label="Remove user from selected cards"
+        (click)="remove.emit(user().id)"
+      >
+        Deselect
+      </button>
+      <button
+        class="delete-button"
+        type="button"
+        [disabled]="saving()"
+        aria-label="Delete user"
+        (click)="delete.emit()"
+      >
+        Delete
+      </button>
+    </div>
+  </header>
+
+  @if (editing()) {
+    <form class="user-details" (submit)="$event.preventDefault(); saveChanges()">
+      <label>
+        Username
+        <input
+          [value]="draft().username"
+          (input)="updateField('username', $event)"
+          required
+        />
+      </label>
+      <label>
+        First name
+        <input
+          [value]="draft().firstName"
+          (input)="updateField('firstName', $event)"
+          required
+        />
+      </label>
+      <label>
+        Last name
+        <input
+          [value]="draft().lastName"
+          (input)="updateField('lastName', $event)"
+          required
+        />
+      </label>
+      <label>
+        Email
+        <input
+          type="email"
+          [value]="draft().email"
+          (input)="updateField('email', $event)"
+          required
+        />
+      </label>
+      <label>
+        Phone
+        <input
+          type="tel"
+          [value]="draft().phone"
+          (input)="updateField('phone', $event)"
+        />
+      </label>
+      <div class="card-actions">
+        <button
+          class="secondary-button"
+          type="button"
+          [disabled]="saving()"
+          (click)="cancel.emit()"
+        >
+          Cancel
+        </button>
+        <button class="primary-button" type="submit" [disabled]="saving()">
+          {{ saving() ? 'Saving…' : 'Save changes' }}
+        </button>
+      </div>
+    </form>
+  } @else {
+    <dl class="user-details">
+      <div>
+        <dt>Email</dt>
+        <dd>{{ user().email }}</dd>
+      </div>
+      <div>
+        <dt>Phone</dt>
+        <dd>{{ user().phone }}</dd>
+      </div>
+      <div>
+        <dt>Company</dt>
+        <dd>{{ user().company?.title }}</dd>
+      </div>
+      @if (user().address; as address) {
+        <div>
+          <dt>Location</dt>
+          <dd>{{ address?.city }}, {{ address?.state }}</dd>
+        </div>
+      }
+    </dl>
+    <button class="primary-button edit-button" type="button" (click)="startEditing()">
+      Edit details
+    </button>
+  }
+</article>

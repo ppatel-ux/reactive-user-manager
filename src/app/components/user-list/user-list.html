@@ -1,0 +1,148 @@
+<section class="user-manager" aria-label="User manager">
+  <section class="user-browser" aria-labelledby="browse-heading">
+    <div class="section-heading">
+      <div>
+        <h2 id="browse-heading">Find users</h2>
+        <p>Search usernames and select up to five users for more details.</p>
+      </div>
+      <span class="user-count">{{ selectedIds().length }} / 5</span>
+    </div>
+
+    <button
+      class="primary-button load-users-button"
+      type="button"
+      [disabled]="loadingUsers()"
+      (click)="loadUsers()"
+    >
+      {{ loadingUsers() ? 'Loading users…' : hasRequestedUsers() ? 'Refresh users' : 'Load users' }}
+    </button>
+
+    <details class="create-user-panel">
+      <summary>Create a user</summary>
+      <form class="create-user-form" [formGroup]="createForm" (ngSubmit)="createUser()">
+        <label>
+          Username
+          <input formControlName="username" autocomplete="username" />
+          @if (createForm.controls.username.touched && createForm.controls.username.invalid) {
+            <span class="field-error">Username is required.</span>
+          }
+        </label>
+        <label>
+          First name
+          <input formControlName="firstName" autocomplete="given-name" />
+          @if (createForm.controls.firstName.touched && createForm.controls.firstName.invalid) {
+            <span class="field-error">First name is required.</span>
+          }
+        </label>
+        <label>
+          Last name
+          <input formControlName="lastName" autocomplete="family-name" />
+          @if (createForm.controls.lastName.touched && createForm.controls.lastName.invalid) {
+            <span class="field-error">Last name is required.</span>
+          }
+        </label>
+        <label>
+          Email
+          <input formControlName="email" type="email" autocomplete="email" />
+          @if (createForm.controls.email.touched && createForm.controls.email.invalid) {
+            <span class="field-error">Enter a valid email address.</span>
+          }
+        </label>
+        <label>
+          Phone
+          <input formControlName="phone" type="tel" autocomplete="tel" />
+        </label>
+        <button class="primary-button" type="submit" [disabled]="creating()">
+          {{ creating() ? 'Creating…' : 'Create user' }}
+        </button>
+      </form>
+    </details>
+
+    <label class="search-label" for="user-search">Search usernames</label>
+    <input
+      id="user-search"
+      class="search-input"
+      type="search"
+      placeholder="Try a username..."
+      [value]="searchText()"
+      (input)="onSearch($event)"
+    />
+
+    @if (errorMessage()) {
+      <p class="feedback error-feedback" role="alert">{{ errorMessage() }}</p>
+    }
+    @if (successMessage()) {
+      <p class="feedback success-feedback" role="status">{{ successMessage() }}</p>
+    }
+    @if (!hasRequestedUsers()) {
+      <p class="list-message">Select “Load users” to fetch users from the API.</p>
+    } @else if (loadingUsers()) {
+      <p class="list-message" role="status">Loading users…</p>
+    } @else if (filteredUsers().length === 0) {
+      <p class="list-message">
+        @if (searchText().trim()) {
+          No usernames match “{{ searchText() }}”.
+        } @else {
+          No users are available.
+        }
+      </p>
+    } @else {
+      <ul class="user-results">
+        @for (user of filteredUsers(); track user.id) {
+          <li>
+            <label class="user-option">
+              <input
+                type="checkbox"
+                [checked]="isSelected(user.id)"
+                [disabled]="!isSelected(user.id) && selectedIds().length >= 5"
+                (change)="toggleSelection(user, $event)"
+              />
+              @if (user.image) {
+                <img [src]="user.image" alt="" />
+              }
+              <span class="user-option-text">
+                <strong>{{ user.firstName }} {{ user.lastName }}</strong>
+                <span>@{{ user.username }}</span>
+              </span>
+              @if (loadingDetails().has(user.id)) {
+                <span class="loading-label">Loading…</span>
+              } @else if (isSelected(user.id)) {
+                <span class="selected-label">Selected</span>
+              }
+            </label>
+          </li>
+        }
+      </ul>
+    }
+  </section>
+
+  <section class="selected-section" aria-labelledby="selected-heading">
+    <div class="section-heading">
+      <div>
+        <h2 id="selected-heading">Selected users</h2>
+        <p>Details are fetched when you select a user. Edit and save from each card.</p>
+      </div>
+    </div>
+
+    @if (selectedUsers().length === 0 && selectedIds().length === 0) {
+      <p class="empty-selection">Select a user from the list to show their details here.</p>
+    } @else if (selectedUsers().length === 0) {
+      <p class="list-message" role="status">Loading selected user details…</p>
+    } @else {
+      <div class="user-cards">
+        @for (user of selectedUsers(); track user.id) {
+          <app-user-card
+            [user]="user"
+            [saving]="pendingUserIds().has(user.id)"
+            [editing]="editingId() === user.id"
+            (edit)="editUser($event)"
+            (save)="saveUser(user, $event)"
+            (cancel)="cancelEdit()"
+            (remove)="removeUser($event)"
+            (delete)="deleteUser(user)"
+          />
+        }
+      </div>
+    }
+  </section>
+</section>
