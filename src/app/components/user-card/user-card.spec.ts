@@ -4,7 +4,7 @@ import { UserCard } from './user-card';
 
 describe('UserCard', () => {
   const user: User = {
-    id: 1,
+    id: 'user-1',
     username: 'janedoe',
     firstName: 'Jane',
     lastName: 'Doe',

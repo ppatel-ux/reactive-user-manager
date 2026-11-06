@@ -6,7 +6,7 @@ import { UserList } from './user-list';
 
 describe('UserList', () => {
   const users: User[] = Array.from({ length: 6 }, (_, index) => ({
-    id: index + 1,
+    id: `user-${index + 1}`,
     username: `person${index + 1}`,
     firstName: `First${index + 1}`,
     lastName: `Last${index + 1}`,
@@ -17,12 +17,12 @@ describe('UserList', () => {
   }));
   const userService = {
     getUsers: vi.fn(() => of(users)),
-    getUserDetails: vi.fn((id: number) => of(users[id - 1])),
+    getUserDetails: vi.fn((id: string) => of(users.find((user) => user.id === id)!)),
     createUser: vi.fn((input: Partial<User>) =>
-      of({ ...users[0], ...input, id: 7 }),
+      of({ ...users[0], ...input, id: 'user-7' }),
     ),
-    updateUser: vi.fn((id: number, changes: Partial<User>) =>
-      of({ ...users[id - 1], ...changes }),
+    updateUser: vi.fn((id: string, changes: Partial<User>) =>
+      of({ ...users.find((user) => user.id === id)!, ...changes }),
     ),
     deleteUser: vi.fn(() => of(void 0)),
   };

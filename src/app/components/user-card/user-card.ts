@@ -14,9 +14,9 @@ export class UserCard {
   readonly saving = input(false);
   readonly editing = input(false);
   readonly save = output<UserInput>(); //5 fields
-  readonly edit = output<number>(); //user ID
+  readonly edit = output<string>(); //user ID
   readonly cancel = output<void>(); 
-  readonly remove = output<number>(); //user ID - select/deselect card
+  readonly remove = output<string>(); //user ID - select/deselect card
   readonly delete = output<void>();
 
   readonly draft = signal<UserInput>({ //this.draft() - holds value

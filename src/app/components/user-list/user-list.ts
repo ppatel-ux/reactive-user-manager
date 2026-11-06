@@ -25,11 +25,11 @@ export class UserList {
       ? this.users().filter((user) => user.username.toLowerCase().includes(term))
       : this.users();
   });
-  readonly selectedIds = signal<number[]>([]);
+  readonly selectedIds = signal<string[]>([]);
   readonly selectedUsers = signal<User[]>([]);
-  readonly editingId = signal<number | null>(null);
-  readonly loadingDetails = signal<ReadonlySet<number>>(new Set());
-  readonly pendingUserIds = signal<ReadonlySet<number>>(new Set());
+  readonly editingId = signal<string | null>(null);
+  readonly loadingDetails = signal<ReadonlySet<string>>(new Set());
+  readonly pendingUserIds = signal<ReadonlySet<string>>(new Set());
   readonly creating = signal(false);
   readonly loadingUsers = signal(false);
   readonly hasRequestedUsers = signal(false);
@@ -88,7 +88,7 @@ export class UserList {
     this.errorMessage.set('');
   }
 
-  isSelected(id: number): boolean {
+  isSelected(id: string): boolean {
     return this.selectedIds().includes(id);
   }
 
@@ -172,7 +172,7 @@ export class UserList {
       });
   }
 
-  editUser(id: number): void {
+  editUser(id: string): void {
     this.editingId.set(id);
   }
 
@@ -180,7 +180,7 @@ export class UserList {
     this.editingId.set(null);
   }
 
-  removeUser(id: number): void {
+  removeUser(id: string): void {
     this.selectedIds.update((ids) => ids.filter((item) => item !== id));
     this.selectedUsers.update((users) => users.filter((user) => user.id !== id));
 
